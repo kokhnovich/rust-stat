@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package fleetspeak.stat;
+
+message Request {
+  string path = 1;
+}
+
+message Response {
+  string path = 1;
+  uint64 size = 2;
+  uint64 mode = 3;
+
+  message Extra {
+    // TODO: Some extra stat information.
+  }
+
+  Extra extra = 4;
+}
