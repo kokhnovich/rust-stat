@@ -12,7 +12,10 @@ message Response {
   uint64 mode = 3;
 
   message Extra {
-    // TODO: Some extra stat information.
+    string file_name = 1;
+    uint64 size = 2;
+    uint64 blocks = 3;
+    // TODO add all
   }
 
   Extra extra = 4;
