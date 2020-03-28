@@ -18,7 +18,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   package='fleetspeak.stat',
   syntax='proto3',
   serialized_options=None,
-  serialized_pb=b'\n\nstat.proto\x12\x0f\x66leetspeak.stat\"\x17\n\x07Request\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xc0\x01\n\x08Response\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x04\x12\x0c\n\x04mode\x18\x03 \x01(\x04\x12.\n\x05\x65xtra\x18\x04 \x01(\x0b\x32\x1f.fleetspeak.stat.Response.Extra\x1aZ\n\x05\x45xtra\x12\x11\n\tfile_name\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x04\x12\x0e\n\x06\x62locks\x18\x03 \x01(\x04\x12\x11\n\tio_blocks\x18\x04 \x01(\x04\x12\r\n\x05inode\x18\x05 \x01(\x04\x62\x06proto3'
+  serialized_pb=b'\n\nstat.proto\x12\x0f\x66leetspeak.stat\"\x17\n\x07Request\x12\x0c\n\x04path\x18\x01 \x01(\t\"\xae\x01\n\x08Response\x12\x0c\n\x04path\x18\x01 \x01(\t\x12\x0c\n\x04size\x18\x02 \x01(\x04\x12\x0c\n\x04mode\x18\x03 \x01(\x04\x12.\n\x05\x65xtra\x18\x04 \x01(\x0b\x32\x1f.fleetspeak.stat.Response.Extra\x1aH\n\x05\x45xtra\x12\x0e\n\x06\x62locks\x18\x01 \x01(\x04\x12\x11\n\tio_blocks\x18\x02 \x01(\x04\x12\r\n\x05inode\x18\x03 \x01(\x04\x12\r\n\x05links\x18\x04 \x01(\x04\x62\x06proto3'
 )
 
 
@@ -63,36 +63,29 @@ _RESPONSE_EXTRA = _descriptor.Descriptor(
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='file_name', full_name='fleetspeak.stat.Response.Extra.file_name', index=0,
-      number=1, type=9, cpp_type=9, label=1,
-      has_default_value=False, default_value=b"".decode('utf-8'),
+      name='blocks', full_name='fleetspeak.stat.Response.Extra.blocks', index=0,
+      number=1, type=4, cpp_type=4, label=1,
+      has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='size', full_name='fleetspeak.stat.Response.Extra.size', index=1,
+      name='io_blocks', full_name='fleetspeak.stat.Response.Extra.io_blocks', index=1,
       number=2, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='blocks', full_name='fleetspeak.stat.Response.Extra.blocks', index=2,
+      name='inode', full_name='fleetspeak.stat.Response.Extra.inode', index=2,
       number=3, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR),
     _descriptor.FieldDescriptor(
-      name='io_blocks', full_name='fleetspeak.stat.Response.Extra.io_blocks', index=3,
+      name='links', full_name='fleetspeak.stat.Response.Extra.links', index=3,
       number=4, type=4, cpp_type=4, label=1,
-      has_default_value=False, default_value=0,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      serialized_options=None, file=DESCRIPTOR),
-    _descriptor.FieldDescriptor(
-      name='inode', full_name='fleetspeak.stat.Response.Extra.inode', index=4,
-      number=5, type=4, cpp_type=4, label=1,
       has_default_value=False, default_value=0,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -110,7 +103,7 @@ _RESPONSE_EXTRA = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=159,
-  serialized_end=249,
+  serialized_end=231,
 )
 
 _RESPONSE = _descriptor.Descriptor(
@@ -161,7 +154,7 @@ _RESPONSE = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=57,
-  serialized_end=249,
+  serialized_end=231,
 )
 
 _RESPONSE_EXTRA.containing_type = _RESPONSE
