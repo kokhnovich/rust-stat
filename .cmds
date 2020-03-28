@@ -1,0 +1,32 @@
+/home/user/fleetspeak/bin/server \
+    -components_config "$HOME/.config/fleetspeak-server/components.textproto" \
+    -services_config "$HOME/.config/fleetspeak-server/services.textproto" \
+    -alsologtostderr
+
+
+/home/user/fleetspeak/bin/client \
+    -config "$HOME/.config/fleetspeak-client/config.textproto" \
+    -alsologtostderr
+
+/home/user/.venv/FLEETSPEAK/bin/python /home/user/proj/rust-stat/stat.py \
+    --client_id="247eac3430f29d96" \
+    --fleetspeak_message_listen_address="localhost:1337" \
+    --fleetspeak_server="localhost:9091" \
+    --alsologtostderr
+
+
+
+gedit $HOME/.config/fleetspeak-server/services.textproto
+
+gedit $HOME/.config/fleetspeak-client/textservices/stat.service
+gedit $HOME/.config/fleetspeak-client/textservices/hello.service
+
+python3 -m grpc_tools.protoc stat.proto --python_out=. --proto_path=.
+
+
+/home/user/.venv/FLEETSPEAK/bin/python /home/user/proj/rust-stat/greeter.py \
+    --client_id="247eac3430f29d96" \
+    --fleetspeak_message_listen_address="localhost:1337" \
+    --fleetspeak_server="localhost:9091" \
+    --alsologtostderr
+
