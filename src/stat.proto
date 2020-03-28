@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package stat;
+
+message Request {
+  string path = 1;
+}
+
+message Response {
+  string path = 1;
+  uint64 size = 2;
+  uint64 mode = 3;
+
+  message Extra {
+    uint64 blocks = 1;
+    uint64 io_blocks = 2;
+    uint64 inode = 3;
+    uint64 links = 4;
+  }
+
+  Extra extra = 4;
+  bool errors = 5;
+}

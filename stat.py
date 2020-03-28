@@ -28,6 +28,9 @@ flags.DEFINE_string(
 
 
 def write(filedesc: IO[Text], response: Response):
+    if response.errors:
+        filedesc.write(f"Something went wrong")
+        return
     filedesc.write(f"path: {response.path}\n")
     filedesc.write(f"size: {response.size} bytes\n")
     filedesc.write(f"mode: {stat.filemode(response.mode)}\n")
