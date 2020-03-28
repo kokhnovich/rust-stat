@@ -4,6 +4,9 @@ use std::os::linux::fs::MetadataExt;
 use fleetspeak::Packet;
 
 mod stat;
+use crate::stat::Request;
+use crate::stat::Response;
+use crate::stat::response;
 
 
 fn main() -> std::io::Result<()> {
