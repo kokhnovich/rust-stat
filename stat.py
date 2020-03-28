@@ -11,7 +11,7 @@ from absl import flags
 from fleetspeak.server_connector.connector import InsecureGRPCServiceClient
 from fleetspeak.src.common.proto.fleetspeak.common_pb2 import Message
 
-from stat_pb2 import Request, Response
+from src.stat_pb2 import Request, Response
 
 
 FLAGS = flags.FLAGS
