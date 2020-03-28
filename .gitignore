@@ -1,4 +1,4 @@
 .cmds
-stat/target
-stat/Cargo.lock
-__pycache__/
+target
+Cargo.lock
+__pycache__
