@@ -3,7 +3,16 @@ name = "stat"
 version = "0.1.0"
 authors = ["kokhnovich <akokhnovich@yandex.ru>"]
 edition = "2018"
+build = "build.rs"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+bytes = "0.5.4"
+fleetspeak = "0.1.1"
+prost = "0.6.1"
+prost-types = "0.6"
+libc = "0.2"
+
+[build-dependencies]
+prost-build = { version = "0.6.1"  }
