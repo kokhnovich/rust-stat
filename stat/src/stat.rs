@@ -17,15 +17,13 @@ pub struct Response {
 pub mod response {
     #[derive(Clone, PartialEq, ::prost::Message)]
     pub struct Extra {
-        #[prost(string, tag="1")]
-        pub file_name: std::string::String,
-        #[prost(uint64, tag="2")]
-        pub size: u64,
-        #[prost(uint64, tag="3")]
+        #[prost(uint64, tag="1")]
         pub blocks: u64,
-        #[prost(uint64, tag="4")]
+        #[prost(uint64, tag="2")]
         pub io_blocks: u64,
-        #[prost(uint64, tag="5")]
+        #[prost(uint64, tag="3")]
         pub inode: u64,
+        #[prost(uint64, tag="4")]
+        pub links: u64,
     }
 }

@@ -12,12 +12,10 @@ message Response {
   uint64 mode = 3;
 
   message Extra {
-    string file_name = 1;
-    uint64 size = 2;
-    uint64 blocks = 3;
-    uint64 io_blocks = 4;
-    uint64 inode = 5;
-    // TODO add all
+    uint64 blocks = 1;
+    uint64 io_blocks = 2;
+    uint64 inode = 3;
+    uint64 links = 4;
   }
 
   Extra extra = 4;
