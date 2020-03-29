@@ -31,14 +31,14 @@ fn main() -> std::io::Result<()> {
             };
             fleetspeak::send(Packet {
                 service: String::from("stat"),
-                kind: None,
+                kind: Some("response".to_string()),
                 data: resp,
             })?;
         } else {
             fleetspeak::send(Packet {
                 service: String::from("stat"),
-                kind: Some("no such file error".to_string()),
-                data: stat::Response::default(),
+                kind: Some("error".to_string()),
+                data: stat::Error{what:"No such file".to_string()},
             })?;
         }
     }
