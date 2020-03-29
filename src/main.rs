@@ -32,13 +32,10 @@ fn main() -> std::io::Result<()> {
                 data: resp,
             })?;
         } else {
-            let resp = Response{path:"".to_string(), size:0, mode:0, 
-                                extra:Some(response::Extra{blocks: 0, io_blocks: 0, 
-                                                           inode: 0, links: 0}), errors: true};
             fleetspeak::send(Packet {
                 service: String::from("stat"),
-                kind: None,
-                data: resp,
+                kind: Some("no such file error".to_string()),
+                data: Response::default(),
             })?;
         }
     }
