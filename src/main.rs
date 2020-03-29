@@ -1,8 +1,8 @@
-use std::time::Duration;
+use fleetspeak::Packet;
 use std::fs;
 use std::os::linux::fs::MetadataExt;
-use fleetspeak::Packet;
 use std::path::Path;
+use std::time::Duration;
 
 pub mod stat {
     include!(concat!(env!("OUT_DIR"), "/stat.rs"));
@@ -15,14 +15,20 @@ fn main() -> std::io::Result<()> {
         let packet = fleetspeak::collect(Duration::from_secs(1))?;
 
         let req: stat::Request = packet.data;
-	if Path::new(&req.path).exists() {
+        if Path::new(&req.path).exists() {
             let meta = fs::metadata(&req.path)?;
-            let resp = stat::Response { path: req.path, size: meta.len(), mode: meta.st_mode() as u64,
-                                  extra: Some(stat::response::Extra { blocks: meta.st_blocks(),
-                                                            io_blocks: meta.st_blksize(),
-                                                            inode: meta.st_ino(),
-                                                            links: meta.st_nlink() } ),
-                                  errors: false };
+            let resp = stat::Response {
+                path: req.path,
+                size: meta.len(),
+                mode: meta.st_mode() as u64,
+                extra: Some(stat::response::Extra {
+                    blocks: meta.st_blocks(),
+                    io_blocks: meta.st_blksize(),
+                    inode: meta.st_ino(),
+                    links: meta.st_nlink(),
+                }),
+                errors: false,
+            };
             fleetspeak::send(Packet {
                 service: String::from("stat"),
                 kind: None,
