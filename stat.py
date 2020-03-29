@@ -27,10 +27,10 @@ flags.DEFINE_string(
     help="A path to the file to write the output to.")
 
 
+def write_error(filedesc: IO[Text], error_str):
+    filedesc.write(f"{error_str}\n")
+
 def write(filedesc: IO[Text], response: Response):
-    if response.errors:
-        filedesc.write(f"Something went wrong")
-        return
     filedesc.write(f"path: {response.path}\n")
     filedesc.write(f"size: {response.size} bytes\n")
     filedesc.write(f"mode: {stat.filemode(response.mode)}\n")
@@ -42,12 +42,21 @@ def listener(message: Message, context):
 
     response = Response()
     response.ParseFromString(message.data.value)
-
+    # print("MESSAGE", message)
+    kind = message.message_type
+    # print("KIND", kind)
+    # print("DATA", message.data)
     if FLAGS.output:
         with io.open(FLAGS.output, mode="a", encoding="utf-8") as filedesc:
-            write(filedesc, response)
+            if kind == "":
+                write(filedesc, response)
+            else:
+                write_error(filedesc, kind)
     else:
-        write(sys.stdout, response)
+        if kind == "":
+            write(sys.stdout, response)
+        else:
+            write_error(sys.stdout, kind)
 
 
 def main(argv=None):
