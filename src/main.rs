@@ -15,8 +15,7 @@ fn main() -> std::io::Result<()> {
 
         let req: stat::Request = packet.data;
 
-        let metadata = fs::metadata(&req.path);
-        match metadata {
+        match fs::metadata(&req.path) {
             Ok(meta) => {
                 let resp = stat::Response {
                     path: req.path,
