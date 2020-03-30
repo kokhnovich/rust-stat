@@ -28,7 +28,6 @@ fn main() -> std::io::Result<()> {
                         inode: meta.st_ino(),
                         links: meta.st_nlink(),
                     }),
-                    errors: false,
                 };
                 fleetspeak::send(Packet {
                     service: String::from("stat"),
