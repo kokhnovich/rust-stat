@@ -28,6 +28,13 @@ fn send_data(req_path: String, meta: fs::Metadata) -> std::io::Result<()> {
             io_blocks: meta.st_blksize(),
             inode: meta.st_ino(),
             links: meta.st_nlink(),
+            dev: meta.st_dev(),
+            mode: meta.st_mode(),
+            uid: meta.st_uid(),
+            gid: meta.st_gid(),
+            atime: meta.st_atime(),
+            mtime: meta.st_mtime(),
+            ctime: meta.st_ctime(),
         }),
     };
     fleetspeak::send(Packet {
@@ -51,7 +58,6 @@ fn send_error(e: std::io::Error) -> std::io::Result<()> {
 
 fn main() -> std::io::Result<()> {
     fleetspeak::startup("0.1.1")?;
-
     loop {
         let packet = fleetspeak::collect(Duration::from_secs(1))?;
 
