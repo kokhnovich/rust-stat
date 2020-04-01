@@ -2,3 +2,6 @@
 target
 Cargo.lock
 __pycache__
+stater.py
+src/stat_pb2.py
+
