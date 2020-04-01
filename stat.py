@@ -11,7 +11,7 @@ from absl import flags
 from fleetspeak.server_connector.connector import InsecureGRPCServiceClient
 from fleetspeak.src.common.proto.fleetspeak.common_pb2 import Message
 
-from src.stat_pb2 import Request, Response
+from src.stat_pb2 import Request, Response, Error
 
 
 FLAGS = flags.FLAGS
@@ -27,8 +27,8 @@ flags.DEFINE_string(
     help="A path to the file to write the output to.")
 
 
-def write_error(filedesc: IO[Text], error_str):
-    filedesc.write(f"{error_str}\n")
+def write_error(filedesc: IO[Text], response: Error):
+    filedesc.write(f"{response.what}\n")
 
 def write(filedesc: IO[Text], response: Response):
     filedesc.write(f"path: {response.path}\n")
@@ -40,23 +40,24 @@ def write(filedesc: IO[Text], response: Response):
 def listener(message: Message, context):
     del context  # Unused
 
-    response = Response()
-    response.ParseFromString(message.data.value)
-    # print("MESSAGE", message)
     kind = message.message_type
-    # print("KIND", kind)
-    # print("DATA", message.data)
+    if kind == "response":
+        response = Response()
+    else:
+        response = Error()
+    response.ParseFromString(message.data.value)
+
     if FLAGS.output:
         with io.open(FLAGS.output, mode="a", encoding="utf-8") as filedesc:
-            if kind == "":
+            if kind == "response":
                 write(filedesc, response)
             else:
-                write_error(filedesc, kind)
+                write_error(filedesc, response)
     else:
-        if kind == "":
+        if kind == "response":
             write(sys.stdout, response)
         else:
-            write_error(sys.stdout, kind)
+            write_error(sys.stdout, response)
 
 
 def main(argv=None):
