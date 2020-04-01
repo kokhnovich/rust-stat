@@ -12,9 +12,9 @@ pub mod stat {
     include!(concat!(env!("OUT_DIR"), "/stat.rs"));
 }
 
-fn SendData(req:stat::Request, meta: fs::Metadata) -> std::io::Result<()> {
+fn send_data(req_path: String, meta: fs::Metadata) -> std::io::Result<()> {
     let resp = stat::Response {
-        path: req.path,
+        path: req_path,
         size: meta.len(),
         mode: meta.st_mode() as u64,
         extra: Some(stat::response::Extra {
@@ -32,7 +32,7 @@ fn SendData(req:stat::Request, meta: fs::Metadata) -> std::io::Result<()> {
     Ok(())
 }
 
-fn SendError(e: std::io::Error) -> std::io::Result<()> {
+fn send_error(e: std::io::Error) -> std::io::Result<()> {
     fleetspeak::send(Packet {
         service: String::from("stat"),
         kind: Some("error".to_string()),
@@ -52,8 +52,8 @@ fn main() -> std::io::Result<()> {
         let req: stat::Request = packet.data;
 
         match fs::metadata(&req.path) {
-            Ok(meta) => SendData(req, meta),
-            Err(e) => SendError(e),
+            Ok(meta) => send_data(req.path, meta),
+            Err(e) => send_error(e),
         }?;
     }
 }
