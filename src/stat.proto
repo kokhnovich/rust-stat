@@ -19,5 +19,8 @@ message Response {
   }
 
   Extra extra = 4;
-  bool errors = 5;
+}
+
+message Error {
+  string what = 1;
 }
