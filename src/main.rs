@@ -8,6 +8,12 @@ fn stat_proto_structs_existance() {
     assert!(fs::metadata(concat!(env!("OUT_DIR"), "/stat.rs")).is_ok());
 }
 
+#[test]
+fn test_fs_metadata() {
+    assert!(fs::metadata("/").is_ok());
+    assert!(!fs::metadata("/agfagdsfhags").is_ok());
+}
+
 pub mod stat {
     include!(concat!(env!("OUT_DIR"), "/stat.rs"));
 }
