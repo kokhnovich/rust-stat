@@ -7,29 +7,35 @@ pub mod stat {
     include!(concat!(env!("OUT_DIR"), "/stat.rs"));
 }
 
-fn send_data(req_path: String, meta: fs::Metadata) -> std::io::Result<()> {
+fn get_data(path: String) -> std::io::Result<stat::Response> {
+    let meta = fs::metadata(&path)?;
+    let data = Some(stat::response::Extra {
+        blocks: meta.st_blocks(),
+        io_blocks: meta.st_blksize(),
+        inode: meta.st_ino(),
+        links: meta.st_nlink(),
+        dev: meta.st_dev(),
+        mode: meta.st_mode(),
+        uid: meta.st_uid(),
+        gid: meta.st_gid(),
+        atime: meta.st_atime(),
+        mtime: meta.st_mtime(),
+        ctime: meta.st_ctime(),
+    });
     let resp = stat::Response {
-        path: req_path,
+        path: path,
         size: meta.len(),
         mode: meta.st_mode() as u64,
-        extra: Some(stat::response::Extra {
-            blocks: meta.st_blocks(),
-            io_blocks: meta.st_blksize(),
-            inode: meta.st_ino(),
-            links: meta.st_nlink(),
-            dev: meta.st_dev(),
-            mode: meta.st_mode(),
-            uid: meta.st_uid(),
-            gid: meta.st_gid(),
-            atime: meta.st_atime(),
-            mtime: meta.st_mtime(),
-            ctime: meta.st_ctime(),
-        }),
+        extra: data,
     };
+    Ok(resp)
+}
+
+fn send_data(data: stat::Response) -> std::io::Result<()> {
     fleetspeak::send(Packet {
         service: String::from("stat"),
         kind: Some("response".to_string()),
-        data: resp,
+        data: data,
     })?;
     Ok(())
 }
@@ -52,8 +58,8 @@ fn main() -> std::io::Result<()> {
 
         let req: stat::Request = packet.data;
 
-        match fs::metadata(&req.path) {
-            Ok(meta) => send_data(req.path, meta),
+        match get_data(req.path) {
+            Ok(data_) => send_data(data_),
             Err(e) => send_error(e),
         }?;
     }
