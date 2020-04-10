@@ -5,6 +5,7 @@ use std::os::linux::fs::MetadataExt;
 use std::time::Duration;
 use tempfile::tempdir;
 use tempfile::Builder;
+use std::io::{Write, Result};
 
 pub mod stat {
     include!(concat!(env!("OUT_DIR"), "/stat.rs"));
@@ -26,6 +27,17 @@ fn test_empty_file() -> std::io::Result<()> {
     let _path = file.path().to_str().unwrap().to_string();
     let data = get_data(&_path)?;
     assert_eq!(data.size, 0);
+    Ok(())
+}
+
+#[test]
+fn test_response_size() -> std::io::Result<()> {
+    let mut file = tempfile::NamedTempFile::new()?;
+    let text = "Your text can be here\n";
+    write!(file, "{}", text)?;
+    let _path = file.path().to_str().unwrap().to_string();
+    let data = get_data(&_path)?;
+    assert_eq!(data.size, text.len() as u64); // .len() returns size in bytes
     Ok(())
 }
 
