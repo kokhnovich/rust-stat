@@ -13,6 +13,7 @@ fleetspeak = "0.1.1"
 prost = "0.6.1"
 prost-types = "0.6"
 libc = "0.2"
+tempfile = "3"
 
 [build-dependencies]
 prost-build = { version = "0.6.1"  }

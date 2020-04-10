@@ -1,13 +1,29 @@
 use fleetspeak::Packet;
 use std::fs;
+use std::fs::File;
 use std::os::linux::fs::MetadataExt;
 use std::time::Duration;
+use tempfile::tempdir;
+use tempfile::Builder;
 
 pub mod stat {
     include!(concat!(env!("OUT_DIR"), "/stat.rs"));
 }
 
-fn get_data(path: String) -> std::io::Result<stat::Response> {
+#[test]
+fn test_existence_and_non_exintence() -> std::io::Result<()> {
+    let file = tempfile::NamedTempFile::new()?;
+    println!("{:?}", file.path());
+    let _path = file.path().to_str().unwrap().to_string();
+    assert_eq!(get_data(&_path).is_ok(), true);
+    file.close()?;
+    assert_eq!(get_data(&_path).is_ok(), false);
+    Ok(())
+}
+
+
+
+fn get_data(path: &String) -> std::io::Result<stat::Response> {
     let meta = fs::metadata(&path)?;
     let data = Some(stat::response::Extra {
         blocks: meta.st_blocks(),
@@ -23,7 +39,7 @@ fn get_data(path: String) -> std::io::Result<stat::Response> {
         ctime: meta.st_ctime(),
     });
     let resp = stat::Response {
-        path: path,
+        path: (&path).to_string(),
         size: meta.len(),
         mode: meta.st_mode() as u64,
         extra: data,
@@ -58,7 +74,7 @@ fn main() -> std::io::Result<()> {
 
         let req: stat::Request = packet.data;
 
-        match get_data(req.path) {
+        match get_data(&req.path) {
             Ok(data_) => send_data(data_),
             Err(e) => send_error(e),
         }?;
