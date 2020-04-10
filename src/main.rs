@@ -13,7 +13,6 @@ pub mod stat {
 #[test]
 fn test_existence_and_non_exintence() -> std::io::Result<()> {
     let file = tempfile::NamedTempFile::new()?;
-    println!("{:?}", file.path());
     let _path = file.path().to_str().unwrap().to_string();
     assert_eq!(get_data(&_path).is_ok(), true);
     file.close()?;
@@ -21,7 +20,14 @@ fn test_existence_and_non_exintence() -> std::io::Result<()> {
     Ok(())
 }
 
-
+#[test]
+fn test_empty_file() -> std::io::Result<()> {
+    let file = tempfile::NamedTempFile::new()?;
+    let _path = file.path().to_str().unwrap().to_string();
+    let data = get_data(&_path)?;
+    assert_eq!(data.size, 0);
+    Ok(())
+}
 
 fn get_data(path: &String) -> std::io::Result<stat::Response> {
     let meta = fs::metadata(&path)?;
