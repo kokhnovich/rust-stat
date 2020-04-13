@@ -16,6 +16,13 @@ message Response {
     uint64 io_blocks = 2;
     uint64 inode = 3;
     uint64 links = 4;
+    uint64 dev = 5;
+    uint32 mode = 6;
+    uint32 uid = 7;
+    uint32 gid = 8;
+    int64 atime = 9;
+    int64 mtime = 10;
+    int64 ctime = 11;
   }
 
   Extra extra = 4;
