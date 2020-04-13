@@ -71,10 +71,17 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_existence_and_non_exintence() -> std::io::Result<()> {
+    fn test_existence() -> std::io::Result<()> {
         let file = tempfile::NamedTempFile::new()?;
         let _path = file.path().to_str().unwrap().to_string();
         assert!(get_data(&_path).is_ok());
+        Ok(())
+    }
+
+    #[test]
+    fn test_non_existence() -> std::io::Result<()> {
+        let file = tempfile::NamedTempFile::new()?;
+        let _path = file.path().to_str().unwrap().to_string();
         file.close()?;
         assert!(get_data(&_path).is_err());
         Ok(())
