@@ -1,44 +1,11 @@
 use fleetspeak::Packet;
 use std::fs;
-use std::fs::File;
+use std::io::Write;
 use std::os::linux::fs::MetadataExt;
 use std::time::Duration;
-use tempfile::tempdir;
-use tempfile::Builder;
-use std::io::{Write, Result};
 
 pub mod stat {
     include!(concat!(env!("OUT_DIR"), "/stat.rs"));
-}
-
-#[test]
-fn test_existence_and_non_exintence() -> std::io::Result<()> {
-    let file = tempfile::NamedTempFile::new()?;
-    let _path = file.path().to_str().unwrap().to_string();
-    assert_eq!(get_data(&_path).is_ok(), true);
-    file.close()?;
-    assert_eq!(get_data(&_path).is_ok(), false);
-    Ok(())
-}
-
-#[test]
-fn test_empty_file() -> std::io::Result<()> {
-    let file = tempfile::NamedTempFile::new()?;
-    let _path = file.path().to_str().unwrap().to_string();
-    let data = get_data(&_path)?;
-    assert_eq!(data.size, 0);
-    Ok(())
-}
-
-#[test]
-fn test_response_size() -> std::io::Result<()> {
-    let mut file = tempfile::NamedTempFile::new()?;
-    let text = "Your text can be here\n";
-    write!(file, "{}", text)?;
-    let _path = file.path().to_str().unwrap().to_string();
-    let data = get_data(&_path)?;
-    assert_eq!(data.size, text.len() as u64); // .len() returns size in bytes
-    Ok(())
 }
 
 fn get_data(path: &String) -> std::io::Result<stat::Response> {
@@ -96,5 +63,38 @@ fn main() -> std::io::Result<()> {
             Ok(data_) => send_data(data_),
             Err(e) => send_error(e),
         }?;
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_existence_and_non_exintence() -> std::io::Result<()> {
+        let file = tempfile::NamedTempFile::new()?;
+        let _path = file.path().to_str().unwrap().to_string();
+        assert!(get_data(&_path).is_ok());
+        file.close()?;
+        assert!(get_data(&_path).is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn test_empty_file() -> std::io::Result<()> {
+        let file = tempfile::NamedTempFile::new()?;
+        let _path = file.path().to_str().unwrap().to_string();
+        let data = get_data(&_path)?;
+        assert_eq!(data.size, 0);
+        Ok(())
+    }
+
+    #[test]
+    fn test_response_size() -> std::io::Result<()> {
+        let mut file = tempfile::NamedTempFile::new()?;
+        let text = "Your text can be here\n";
+        write!(file, "{}", text)?;
+        let _path = file.path().to_str().unwrap().to_string();
+        let data = get_data(&_path)?;
+        assert_eq!(data.size, text.len() as u64); // .len() returns size in bytes
+        Ok(())
     }
 }
