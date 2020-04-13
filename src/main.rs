@@ -68,6 +68,8 @@ fn main() -> std::io::Result<()> {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn test_existence_and_non_exintence() -> std::io::Result<()> {
         let file = tempfile::NamedTempFile::new()?;
